@@ -40,16 +40,16 @@ class Stops():
         """
             Writes a list of 'Stop' models to a file in csv format.
 
-            :param stopss [Optional[List[Stop]]] -- A list containing 'Stop' models, if not given it will take 'self.stops' if set
+            :param stops [Optional[List[Stop]]] -- A list containing 'Stop' models, if not given it will take 'self.stops' if set
             :param file [Optional[str]] -- The file to write to, if not given it will take 'self.file' if set
 
             :return bool -- True on success, else False or raises Error if not silent error enabled
         """
 
-        if not agencies:
+        if not stops:
             if self.stops == None:
                 raise TypeError("Got no stops to write to file!")
-            agencies = self.stops
+            stops = self.stops
 
         if not file:
             if self.file == None:
@@ -157,19 +157,19 @@ class Stops():
         """
         stops = []
 
-        for Stop in stops_list:
-            if self.is_valid_Stop(Stop):
-                stops.append(Stop.parse_obj(Stop))
+        for stop in stops_list:
+            if self.is_valid_Stop(stop):
+                stops.append(Stop.parse_obj(stop))
             else:
                 if self.error_manager.is_silent_errors():
                     self.error_manager.add_error(StopError(
                         error_type = ErrorTypes.StopErrorInvalidStop,
                         message="Invalid stop from dict!",
-                        values = [Stop]
+                        values = [stop]
                     ))
                     return False
                 else:
-                    raise ValueError(f"Invalid stop: {Stop}")
+                    raise ValueError(f"Invalid stop: {stop}")
 
         return stops
     
@@ -277,7 +277,7 @@ class Stops():
         """
 
         try:
-            Stop.parse_obj(Stop)
+            Stop.parse_obj(stop)
 
         except ValidationError as e:
             errors = {}
